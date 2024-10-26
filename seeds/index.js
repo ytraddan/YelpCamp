@@ -13,7 +13,7 @@ const randItem = (array) => array[Math.floor(Math.random() * array.length)];
 
 const seedDB = async () => {
   await Campground.deleteMany();
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < 10; i++) {
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
       location: `${randItem(cities).city}, ${randItem(cities).state}`,
