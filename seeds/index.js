@@ -16,6 +16,7 @@ const seedDB = async () => {
   for (let i = 0; i < 12; i++) {
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
+      author: "671ce14050f72fb025cf62d7",
       location: `${randItem(cities).city}, ${randItem(cities).state}`,
       title: `${randItem(descriptors)} ${randItem(places)}`,
       image: `https://random-image-pepebigotes.vercel.app/api/random-image`,

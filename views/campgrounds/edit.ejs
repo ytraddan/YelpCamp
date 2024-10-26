@@ -29,10 +29,10 @@
           <textarea class="form-control" type="text" id="location"
             name="campground[description]" required><%= campground.description %> </textarea>
         </div>
-        <div class="mb-3 d-inline">
+        <div class="mb-3 ">
           <button class="btn btn-success">Save</button>
+          <a  href="/campgrounds/<%= campground._id %>" class="btn btn-danger d-inline p-2">Cancel</a>
         </div>
-        <a  href="/campgrounds/<%= campground._id %>" class="btn btn-danger d-inline">Cancel</a>
       </form >
     </div>
   </div>
