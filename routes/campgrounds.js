@@ -6,35 +6,39 @@ const {
   isAuthor,
   validateCampground,
 } = require("../middleware.js");
+const { storage } = require("../cloudinary");
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ storage });
+
 const router = express.Router();
 
+// Show All Campgrounds/ Add New Campground
 router
   .route("/")
   .get(catchAsync(campgrounds.index))
-  // .post(
-  //   isLoggedIn,
-  //   validateCampground,
-  //   catchAsync(campgrounds.createCampground)
-  // );
-  .post(upload.array("image"), (req, res) => {
+  .post(
+    isLoggedIn,
+    upload.array("images"),
+    validateCampground,
+    catchAsync(campgrounds.createCampground)
+  );
 
-    
-  });
 router.get("/new", isLoggedIn, campgrounds.renderNewForm);
 
+// Show/Edit/Delete Campground
 router
   .route("/:id")
   .get(catchAsync(campgrounds.showCampgound))
   .put(
     isLoggedIn,
     isAuthor,
+    upload.array("images"),
     validateCampground,
     catchAsync(campgrounds.updateCampgound)
   )
   .delete(isLoggedIn, isAuthor, catchAsync(campgrounds.deleteCampgound));
 
+// Show Campground Edit Form
 router.get(
   "/:id/edit",
   isLoggedIn,
