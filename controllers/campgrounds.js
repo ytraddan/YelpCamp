@@ -1,5 +1,8 @@
 const Campground = require("../models/campground");
 const { cloudinary } = require("../cloudinary");
+// MapTiler API
+const maptilerClient = require("@maptiler/client");
+maptilerClient.config.apiKey = process.env.MAPTILER_API_KEY;
 
 // Show All Campgrounds
 module.exports.index = async (req, res, next) => {
@@ -7,14 +10,19 @@ module.exports.index = async (req, res, next) => {
   res.render("campgrounds/index", { campgrounds });
 };
 
-// Show New Capmground Form
+// Show Create Capmground Form
 module.exports.renderNewForm = (req, res) => {
   res.render("campgrounds/new");
 };
 
-// Create New Capmground
+// Create Capmground
 module.exports.createCampground = async (req, res, next) => {
+  const geoData = await maptilerClient.geocoding.forward(
+    req.body.campground.location,
+    { limit: 1 }
+  );
   const campground = new Campground(req.body.campground);
+  campground.geometry = geoData.features[0].geometry;
   campground.images = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,
@@ -61,6 +69,11 @@ module.exports.updateCampgound = async (req, res, next) => {
   const campground = await Campground.findByIdAndUpdate(id, {
     ...req.body.campground,
   });
+  const geoData = await maptilerClient.geocoding.forward(
+    req.body.campground.location,
+    { limit: 1 }
+  );
+  campground.geometry = geoData.features[0].geometry;
   images = req.files.map((file) => ({
     url: file.path,
     filename: file.filename,
