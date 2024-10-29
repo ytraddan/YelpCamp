@@ -35,6 +35,8 @@ map.on("load", function () {
         "#3F51B5",
       ],
       "circle-radius": ["step", ["get", "point_count"], 19, 10, 24, 30, 29],
+      "circle-stroke-width": 1,
+      "circle-stroke-color": "#000",
     },
   });
 
@@ -59,7 +61,7 @@ map.on("load", function () {
       "circle-color": "#11b4da",
       "circle-radius": 10,
       "circle-stroke-width": 1,
-      "circle-stroke-color": "#fff",
+      "circle-stroke-color": "#000",
     },
   });
 
