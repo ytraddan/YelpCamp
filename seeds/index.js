@@ -16,15 +16,12 @@ const seedDB = async () => {
   for (let i = 0; i < 190; i++) {
     const price = Math.floor(Math.random() * 20) + 10;
     const camp = new Campground({
-      author: "671ce14050f72fb025cf62d7",
+      author: "672249f816ebfcc6dff903e9",
       location: `${randItem(cities).city}, ${randItem(cities).state}`,
       title: `${randItem(descriptors)} ${randItem(places)}`,
       geometry: {
         type: "Point",
-        coordinates: [
-          randItem(cities).longitude,
-          randItem(cities).latitude,
-        ],
+        coordinates: [randItem(cities).longitude, randItem(cities).latitude],
       },
       images: [
         {
