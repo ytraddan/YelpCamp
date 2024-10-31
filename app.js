@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
@@ -19,8 +18,12 @@ const campgroundsRoutes = require("./routes/campgrounds.js");
 const reviewsRoutes = require("./routes/reviews.js");
 const userRoutes = require("./routes/users.js");
 const helmet = require("helmet");
+const { url } = require("inspector");
+const { name } = require("ejs");
+const MongoStore = require("connect-mongo")(session);
 
-mongoose.connect("mongodb://localhost:27017/yelp-camp");
+const dbURL = process.env.DB_URL || "mongodb://localhost:27017/campgrounds";
+mongoose.connect(dbURL);
 const db = mongoose.connection;
 
 db.on("error", console.error.bind("Connection error"));
@@ -37,8 +40,21 @@ app.use(methodOverride("_method"));
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(mongoSanitize());
+
+const secret = process.env.SESSION_SECRET || "Placeholder";
+
+const store = new MongoStore({
+  url: dbURL,
+  secret,
+  touchAfter: 24 * 60 * 60,
+});
+
+store.on("error", console.error.bind("MongoStore error"));
+
 const sessionConfig = {
-  secret: "Placeholder",
+  store,
+  name: "session",
+  secret,
   resave: false,
   saveUninitialized: true,
   cookie: {
